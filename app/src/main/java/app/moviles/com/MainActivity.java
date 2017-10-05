@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_VIDEO_CAPTURE = 2;
 
     private static final int REQUEST_PERMISSION_CAMERA = 3;
+    private static final int REQUEST_PERMISSION_WRITE = 4;
 
 
     private String mCurrentPhotoPath;
@@ -100,10 +101,23 @@ public class MainActivity extends AppCompatActivity {
                     requestPermissions();
                 }
             }
+            case REQUEST_PERMISSION_WRITE: {
+                if (grantResults.length > 0
+                        && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions();
+                }
+            }
         }
     }
 
     private void requestPermissions() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSION_WRITE);
+        }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -125,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
     }
 
     private File createImageFile() throws IOException {
