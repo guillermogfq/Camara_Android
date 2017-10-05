@@ -15,12 +15,14 @@
         android:layout_width="match_parent"
         android:layout_height="350dp">
         <ImageView
+            android:id="@+id/imagen"
             android:visibility="gone"
             android:layout_margin="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <VideoView
+            android:id="@+id/video"
             android:visibility="gone"
             android:layout_margin="5dp"
             android:layout_width="match_parent"
@@ -34,12 +36,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
+            android:id="@+id/btnfoto"
             android:text="Sacar Foto"
             android:layout_weight="1"
             android:layout_marginRight="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
+            android:id="@+id/btnvideo"
             android:text="Tomar Video"
             android:layout_weight="1"
             android:layout_marginLeft="2dp"
