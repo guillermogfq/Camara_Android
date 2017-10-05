@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
@@ -34,11 +35,18 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private ImageView mImageView;
     private VideoView mVideoView;
+    private Button btnfoto;
+    private Button btnvideo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mImageView = (ImageView) findViewById(R.id.imagen);
+        mVideoView = (VideoView) findViewById(R.id.video);
+        btnfoto = (Button) findViewById(R.id.btnfoto);
+        btnvideo = (Button) findViewById(R.id.btnvideo);
 
         requestPermissions();
     }
@@ -47,11 +55,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Uri imageUri = Uri.parse(mCurrentPhotoPath);
+            mImageView.setVisibility(View.VISIBLE);
+            mVideoView.setVisibility(View.GONE);
             mImageView.setImageURI(imageUri);
         }
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Uri videoUri = data.getData();
+            mVideoView.setVisibility(View.VISIBLE);
+            mImageView.setVisibility(View.GONE);
             mVideoView.setVideoURI(videoUri);
         }
     }
@@ -70,10 +82,22 @@ public class MainActivity extends AppCompatActivity {
             case REQUEST_PERMISSION_CAMERA: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //Otorgafo
+                    btnfoto.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            TakePictureIntent();
+                        }
+                    });
+
+                    btnvideo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            TakeVideoIntent();
+                        }
+                    });
 
                 } else {
-                    //No otorgado
+                    requestPermissions();
                 }
             }
         }
@@ -87,12 +111,23 @@ public class MainActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.CAMERA},
                     REQUEST_PERMISSION_CAMERA);
         } else {
-            //Permiso Listo
+            btnfoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    TakePictureIntent();
+                }
+            });
+
+            btnvideo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    TakeVideoIntent();
+                }
+            });
         }
     }
 
     private File createImageFile() throws IOException {
-        // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
